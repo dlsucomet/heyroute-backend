@@ -23,12 +23,17 @@ async def process_voice_activity(audio_file: UploadFile = File(...)):
 	try:
 		audio_bytes = await audio_file.read()
 
-		#placeholder
+		clean_audio_bytes = apply_vad_filter(audio_bytes)
+
+		# just to calculate how much noise was filtered out
+		original_size = len(audio_bytes)
+		clean_size = len(clean_audio_bytes)
 		
 		return {
 			"filename": audio_file.filename,
-			"content_type": audio_file.content_type,
-			"message": "Audio file received, ready for VAD processing."
+			"original_bytes": original_size,
+			"clean_bytes": clean_size,
+			"message": "Audio processed through VAD filter successfully."
 		}
 	except Exception as e:
 		raise HTTPException(status_code=500, detail=f"Error processing audio file: {str(e)}")
