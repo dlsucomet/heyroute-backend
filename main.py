@@ -14,7 +14,9 @@ load_dotenv()
 
 app = FastAPI(title="HeyRoute API")
 
-ASR_URL = "http://altdsidccf.dlsu.edu.ph:33070/transcribe"
+# ASR_URL = "http://altdsidccf.dlsu.edu.ph:33070/transcribe"
+ASR_URL = "http://172.16.3.217:80/transcribe"
+
 ASR_API_KEY = os.getenv("ASR_API_KEY")
 if not ASR_API_KEY:
 	raise ValueError("CRITICAL ERROR: ASR_API_KEY is missing from the environment variables.")
