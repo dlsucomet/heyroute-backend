@@ -2,7 +2,7 @@ import os
 import io
 import wave
 import httpx
-from fastapi import FastAPI, Depends, HTTPException, File, UploadFile, Query
+from fastapi import FastAPI, Depends, HTTPException, File, UploadFile, Query, Header
 from fastapi.responses import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
@@ -46,8 +46,13 @@ async def db_check(db: AsyncSession = Depends(get_db)):
 @app.post("/api/voice/vad")
 async def process_voice_activity(
 	audio_file: UploadFile = File(...), 
-	download: bool = Query(False, description="Set to true to download the cleaned audio file")
+	download: bool = Query(False, description="Set to true to download the cleaned audio file"),
+	x_user_id: str = Header(..., description="User ID for database querying"),
+	x_session_id: str = Header(..., description="Session ID for the current routing trip")
 	):
+
+	print(f"Processing audio file: {audio_file.filename} for user: {x_user_id}, session: {x_session_id}")
+	
 	try:
 		# Read the uploaded audio file
 		audio_bytes = await audio_file.read()
